@@ -114,9 +114,9 @@ class Machine:
 			if c not in self.alphabet:
 				raise ValueError("Invalid symbol in tape.")
 		state = self.initState
-		if view:
-			tape.view()
 		while state != halt:
+			if view:
+				tape.view()
 			currentRead = tape.read()
 			for case in self.transFunc:
 				if case.initState == state and case.readSym == currentRead:
@@ -128,10 +128,8 @@ class Machine:
 			else:
 				tape.left()
 			state = opCase.newState
-			if view:
-				tape.view()
 			sleep(interval)
-
+		tape.view()
 
 # Example: Binary palindrome detector. If the tape is blank when the program
 # halts, the string is a palindrome. Otherwise, the string is not a
@@ -158,10 +156,7 @@ TM = Machine(stateSet=['i', 'p0', 'p1', 'q0', 'q1', 'r'],
 			 initState='i',
 			 transFunc=delta)
 
-tape1 = Tape("10101")
+tape1 = Tape("1101010101011")
 TM.eval(tape1)
-print("*"*80)
-tape2 = Tape("1101")
-TM.eval(tape2)
 
 input("Press enter to exit")
